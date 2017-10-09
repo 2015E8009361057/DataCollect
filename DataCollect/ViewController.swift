@@ -34,6 +34,14 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
     @IBOutlet var speed: UILabel!
     @IBOutlet var direction: UILabel!
     
+    func timeStampToDate(timeStampInterval timeStamp: TimeInterval) -> String{
+        let timeInterval: TimeInterval = TimeInterval(timeStamp)
+        let date = Date(timeIntervalSince1970: timeInterval)
+        let dateFormat = DateFormatter()
+        dateFormat.dateFormat = "yyyy-MM-dd HH:mm:ss"
+        return dateFormat.string(from: date)
+    }
+    
     func getUpdateMotionData() {
         // 设置传感器信息更新频率
         print("打印传感器信息")
@@ -52,7 +60,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
                     self.rotX.text = String(deviceData.rotationRate.x)
                     self.rotY.text = String(deviceData.rotationRate.y)
                     self.rotZ.text = String(deviceData.rotationRate.z)
-                    print(deviceData.timestamp)
+                    let timeStampInterval = Date().timeIntervalSince1970
+                    print("device " + self.timeStampToDate(timeStampInterval: timeStampInterval))
                 }
             })
         }
@@ -65,7 +74,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
                     self.magX.text = String(magData.magneticField.x)
                     self.magY.text = String(magData.magneticField.y)
                     self.magZ.text = String(magData.magneticField.z)
-                    print(magData.timestamp)
+                    let timeStampInterval = Date().timeIntervalSince1970
+                    print("mag " + self.timeStampToDate(timeStampInterval: timeStampInterval))
                 }
             })
         }
