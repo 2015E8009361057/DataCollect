@@ -9,6 +9,8 @@
 import UIKit
 import CoreMotion
 import CoreLocation
+import SQLite
+
 
 class ViewController: UIViewController, CLLocationManagerDelegate {
     
@@ -33,6 +35,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
     @IBOutlet var height: UILabel!
     @IBOutlet var speed: UILabel!
     @IBOutlet var direction: UILabel!
+    
     
     func timeStampToDate(timeStampInterval timeStamp: TimeInterval) -> String{
         let timeInterval: TimeInterval = TimeInterval(timeStamp)

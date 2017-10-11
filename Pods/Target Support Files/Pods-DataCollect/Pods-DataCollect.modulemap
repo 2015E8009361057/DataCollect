@@ -1,0 +1,6 @@
+framework module Pods_DataCollect {
+  umbrella header "Pods-DataCollect-umbrella.h"
+
+  export *
+  module * { export * }
+}
