@@ -48,6 +48,36 @@ class LocationHeadingEntity {
         }
     }
     
+    // Insert a record to tblLocationHeading
+    func insert(timeStamp: Double, date: String, actualDirection: Double, directionAccuracy: Double) -> Int64? {
+        do {
+            let insert = tblLocationHeading.insert(self.timeStamp <- timeStamp,
+                                                   self.date <- date,
+                                            self.actualDirection <- actualDirection,
+                                            self.directionAccuracy <- directionAccuracy)
+            let insertId = try Database.shared.connection!.run(insert)
+            return insertId
+        }
+        catch {
+            let nserror = error as NSError
+            print("Cannot insert new LocationHeading. Error is: \(nserror), \(nserror.userInfo)")
+            return nil
+        }
+    }
+    
+    
+    // Query (find) all records in tblLocationHeading
+    func queryAll() -> AnySequence<Row>? {
+        do {
+            return try Database.shared.connection?.prepare(self.tblLocationHeading)
+        }
+        catch {
+            let nserror = error as NSError
+            print("Cannot query(list) all tblLocation. Error is: \(nserror), \(nserror.userInfo)")
+            return nil
+        }
+    }
+    
     func toString(locationHeading: Row) {
         print("""
             Location Heading Info: \n
