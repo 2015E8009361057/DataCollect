@@ -98,8 +98,9 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
                     self.rotY.text = String(deviceData.rotationRate.y)
                     self.rotZ.text = String(deviceData.rotationRate.z)
                     
+                    let rotationMatrix = deviceData.attitude.rotationMatrix
                     // 插入到数据库 tblDeviceMotion 表中
-                    let insertId = DeviceMotionEntity.shared.insert(timeStamp: timeStampInterval, date: date, accelerometerX: deviceData.userAcceleration.x, accelerometerY: deviceData.userAcceleration.y, accelerometerZ: deviceData.userAcceleration.z, gyroscopeX: deviceData.rotationRate.x, gyroscopeY: deviceData.rotationRate.y, gyroscopeZ: deviceData.rotationRate.z)
+                    let insertId = DeviceMotionEntity.shared.insert(timeStamp: timeStampInterval, date: date, accelerometerX: deviceData.userAcceleration.x, accelerometerY: deviceData.userAcceleration.y, accelerometerZ: deviceData.userAcceleration.z, gyroscopeX: deviceData.rotationRate.x, gyroscopeY: deviceData.rotationRate.y, gyroscopeZ: deviceData.rotationRate.z, rotationMatrixM11: rotationMatrix.m11, rotationMatrixM12: rotationMatrix.m12, rotationMatrixM13: rotationMatrix.m13, rotationMatrixM21: rotationMatrix.m21, rotationMatrixM22: rotationMatrix.m22, rotationMatrixM23: rotationMatrix.m23, rotationMatrixM31: rotationMatrix.m31, rotationMatrixM32: rotationMatrix.m32, rotationMatrixM33: rotationMatrix.m33)
                     if (insertId != nil) {
                         print("Insert a record to tblDeviceMotion Successfully!")
                     }
