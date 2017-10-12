@@ -31,7 +31,7 @@ class DeviceMotionEntity {
     private let gyroscopeY = Expression<Double>("gyroscopeY")
     private let gyroscopeZ = Expression<Double>("gyroscopeZ")
     
-    // Store data of rotationMatrix
+    // Store data of rotationMatrix  设备的旋转矩阵
     private let rotationMatrixM11 = Expression<Double>("rotationMatrixM11")
     private let rotationMatrixM12 = Expression<Double>("rotationMatrixM12")
     private let rotationMatrixM13 = Expression<Double>("rotationMatrixM13")
