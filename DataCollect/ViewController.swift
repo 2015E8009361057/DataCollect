@@ -172,7 +172,6 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
     
     // 定位改变执行，可以得到新位置、旧位置
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        print("打印GPS信息")
         // 获取最新的坐标
         let currentLocation = locations.last!
         
@@ -218,8 +217,6 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         }
     }
     
-    
-    
     /*
     override func viewDidAppear(_ animated: Bool) {
         if (CLLocationManager.authorizationStatus() != .denied) {
@@ -246,7 +243,6 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
             self.present(alert, animated: true, completion: nil)
         }
     }
- 
     */
 }
 
