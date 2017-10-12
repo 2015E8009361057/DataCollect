@@ -11,6 +11,7 @@
 		477243491F8EF59700902148 /* DeviceMotionEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 477243481F8EF59700902148 /* DeviceMotionEntity.swift */; };
 		4772434B1F8F087700902148 /* MagnetometerEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4772434A1F8F087700902148 /* MagnetometerEntity.swift */; };
 		4772434D1F8F115400902148 /* LocationEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4772434C1F8F115400902148 /* LocationEntity.swift */; };
+		477243511F8F172E00902148 /* LocationHeadingEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 477243501F8F172E00902148 /* LocationHeadingEntity.swift */; };
 		477E79D61F8A167C0052DCDC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 477E79D51F8A167C0052DCDC /* AppDelegate.swift */; };
 		477E79D81F8A167C0052DCDC /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 477E79D71F8A167C0052DCDC /* ViewController.swift */; };
 		477E79DB1F8A167C0052DCDC /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 477E79D91F8A167C0052DCDC /* Main.storyboard */; };
@@ -45,6 +46,7 @@
 		477243481F8EF59700902148 /* DeviceMotionEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceMotionEntity.swift; sourceTree = "<group>"; };
 		4772434A1F8F087700902148 /* MagnetometerEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MagnetometerEntity.swift; sourceTree = "<group>"; };
 		4772434C1F8F115400902148 /* LocationEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationEntity.swift; sourceTree = "<group>"; };
+		477243501F8F172E00902148 /* LocationHeadingEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationHeadingEntity.swift; sourceTree = "<group>"; };
 		477E79D21F8A167C0052DCDC /* DataCollect.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DataCollect.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		477E79D51F8A167C0052DCDC /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		477E79D71F8A167C0052DCDC /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -94,6 +96,7 @@
 				477243481F8EF59700902148 /* DeviceMotionEntity.swift */,
 				4772434A1F8F087700902148 /* MagnetometerEntity.swift */,
 				4772434C1F8F115400902148 /* LocationEntity.swift */,
+				477243501F8F172E00902148 /* LocationHeadingEntity.swift */,
 			);
 			path = Database;
 			sourceTree = "<group>";
@@ -360,6 +363,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				477243511F8F172E00902148 /* LocationHeadingEntity.swift in Sources */,
 				477243441F8EF19B00902148 /* Database.swift in Sources */,
 				4772434D1F8F115400902148 /* LocationEntity.swift in Sources */,
 				477E79D81F8A167C0052DCDC /* ViewController.swift in Sources */,
