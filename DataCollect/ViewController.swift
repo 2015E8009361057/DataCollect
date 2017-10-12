@@ -78,13 +78,16 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
     // 开始获取加速计、陀螺仪、磁力计信息
     func startGetUpdateMotionData() {
         // 设置传感器信息更新频率
-        print("打印传感器信息")
         let updateInterval = 1.0 / 20
         // 获取 去掉影响因素后的 加速计 和 陀螺仪 信息
         if (motionManager.isDeviceMotionAvailable) {
             motionManager.deviceMotionUpdateInterval = updateInterval
             motionManager.startDeviceMotionUpdates(to: OperationQueue.current!, withHandler: {(data, error) in
                 if let deviceData = data {
+                    // 获取当前时间
+                    let timeStampInterval = Date().timeIntervalSince1970
+                    let date = self.timeStampToDate(timeStampInterval: timeStampInterval)
+                    
                     // 显示加速计信息
                     self.accX.text = String(deviceData.userAcceleration.x)
                     self.accY.text = String(deviceData.userAcceleration.y)
@@ -94,8 +97,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
                     self.rotX.text = String(deviceData.rotationRate.x)
                     self.rotY.text = String(deviceData.rotationRate.y)
                     self.rotZ.text = String(deviceData.rotationRate.z)
-                    let timeStampInterval = Date().timeIntervalSince1970
-                    let date = self.timeStampToDate(timeStampInterval: timeStampInterval)
+                    
+                    // 插入到数据库 tblDeviceMotion 表中
                     let insertId = DeviceMotionEntity.shared.insert(timeStamp: timeStampInterval, date: date, accelerometerX: deviceData.userAcceleration.x, accelerometerY: deviceData.userAcceleration.y, accelerometerZ: deviceData.userAcceleration.z, gyroscopeX: deviceData.rotationRate.x, gyroscopeY: deviceData.rotationRate.y, gyroscopeZ: deviceData.rotationRate.z)
                     if (insertId != nil) {
                         print("Insert a record to tblDeviceMotion Successfully!")
@@ -111,24 +114,35 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
             motionManager.magnetometerUpdateInterval = updateInterval
             motionManager.startMagnetometerUpdates(to: OperationQueue.current!, withHandler: {(data, error) in
                 if let magData = data {
+                    // 获取当前时间
+                    let timeStampInterval = Date().timeIntervalSince1970
+                    let date = self.timeStampToDate(timeStampInterval: timeStampInterval)
+                    
                     // 显示磁力计信息
                     self.magX.text = String(magData.magneticField.x)
                     self.magY.text = String(magData.magneticField.y)
                     self.magZ.text = String(magData.magneticField.z)
-                    let timeStampInterval = Date().timeIntervalSince1970
-                    print("mag " + self.timeStampToDate(timeStampInterval: timeStampInterval))
+                    
+                    // 插入到数据库 tblMagnetometer 表中
+                    let insertId = MagnetometerEntity.shared.insert(timeStamp: timeStampInterval, date: date, magnetometerX: magData.magneticField.x, magnetometerY: magData.magneticField.y, magnetometerZ: magData.magneticField.z)
+                    if (insertId != nil) {
+                        print("Insert a record to tblMagnetometer Successfully!")
+                    }
+                    else {
+                        print("Insert a record to tblMagnetometer failed.")
+                    }
                 }
             })
         }
     }
     
-    // 停止获取加速计、陀螺仪、磁力计信息
+    // 停止获取并存储加速计、陀螺仪、磁力计信息
     func stopGetUpdateMotionData() {
         motionManager.stopDeviceMotionUpdates()
         motionManager.stopMagnetometerUpdates()
     }
     
-    // 开始获取位置信息
+    // 开始获取并存储位置信息
     func startGetUpdateLocationData() {
         // Send Authorization Request
         locationManager.requestWhenInUseAuthorization()
@@ -161,6 +175,11 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         print("打印GPS信息")
         // 获取最新的坐标
         let currentLocation = locations.last!
+        
+        // 获取当前时间
+        let timeStampInterval = Date().timeIntervalSince1970
+        let date = self.timeStampToDate(timeStampInterval: timeStampInterval)
+        
         // 获取经度
         longitude.text = String(currentLocation.coordinate.longitude)
         // 获取纬度
@@ -169,14 +188,34 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         height.text = String(currentLocation.altitude)
         // 获取速度
         speed.text = String(currentLocation.speed)
-        print(currentLocation.timestamp)
+        
+        // 插入到数据库 tblLocation 表中
+        let insertId = LocationEntity.shared.insert(timeStamp: timeStampInterval, date: date, longitude: currentLocation.coordinate.longitude, latitude: currentLocation.coordinate.latitude, height: currentLocation.altitude, speed: currentLocation.speed, horizontalAccuracy: currentLocation.horizontalAccuracy, verticalAccuracy: currentLocation.verticalAccuracy)
+        if (insertId != nil) {
+            print("Insert a record to tblLocation Successfully!")
+        }
+        else {
+            print("Insert a record to tblLocation failed.")
+        }
     }
     
     //方向改变执行
     func locationManager(_ manager: CLLocationManager, didUpdateHeading newHeading: CLHeading) {
+        // 获取当前时间
+        let timeStampInterval = Date().timeIntervalSince1970
+        let date = self.timeStampToDate(timeStampInterval: timeStampInterval)
+        
         // 获取方向
         direction.text = String(newHeading.trueHeading)
-        print(newHeading.timestamp)
+        
+        // 插入到数据库 tblLocationHeading 表中
+        let insertId = LocationHeadingEntity.shared.insert(timeStamp: timeStampInterval, date: date, actualDirection: newHeading.trueHeading, directionAccuracy: newHeading.headingAccuracy)
+        if (insertId != nil) {
+            print("Insert a record to tblLocationHeading Successfully!")
+        }
+        else {
+            print("Insert a record to tblLocationHeading failed.")
+        }
     }
     
     
