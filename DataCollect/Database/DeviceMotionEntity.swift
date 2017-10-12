@@ -58,6 +58,39 @@ class DeviceMotionEntity {
         }
     }
     
+    // Insert a record to tblDeviceMotion
+    func insert(timeStamp: Double, date: String, accelerometerX: Double, accelerometerY: Double, accelerometerZ: Double, gyroscopeX: Double, gyroscopeY: Double, gyroscopeZ: Double) -> Int64? {
+        do {
+            let insert = tblDeviceMotion.insert(self.timeStamp <- timeStamp,
+                                                self.date <- date,
+                                                self.accelerometerX <- accelerometerX,
+                                                self.accelerometerY <- accelerometerY,
+                                                self.accelerometerZ <- accelerometerZ,
+                                                self.gyroscopeX <- gyroscopeX,
+                                                self.gyroscopeY <- gyroscopeY,
+                                                self.gyroscopeZ <- gyroscopeZ)
+            let insertId = try Database.shared.connection!.run(insert)
+            return insertId
+        }
+        catch {
+            let nserror = error as NSError
+            print("Cannot insert new DeviceMotion. Error is: \(nserror), \(nserror.userInfo)")
+            return nil
+        }
+    }
+    
+    // Query (find) all records in tblDeviceMotion
+    func queryAll() -> AnySequence<Row>? {
+        do {
+            return try Database.shared.connection?.prepare(self.tblDeviceMotion)
+        }
+        catch {
+            let nserror = error as NSError
+            print("Cannot query(list) all tblDeviceMotion. Error is: \(nserror), \(nserror.userInfo)")
+            return nil
+        }
+    }
+    
     func toString(deviceMotion: Row) {
         print("""
                 Device Motion Details: \n
