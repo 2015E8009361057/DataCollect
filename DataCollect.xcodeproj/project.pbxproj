@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		477243441F8EF19B00902148 /* Database.swift in Sources */ = {isa = PBXBuildFile; fileRef = 477243431F8EF19B00902148 /* Database.swift */; };
+		477243491F8EF59700902148 /* DeviceMotionEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 477243481F8EF59700902148 /* DeviceMotionEntity.swift */; };
 		477E79D61F8A167C0052DCDC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 477E79D51F8A167C0052DCDC /* AppDelegate.swift */; };
 		477E79D81F8A167C0052DCDC /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 477E79D71F8A167C0052DCDC /* ViewController.swift */; };
 		477E79DB1F8A167C0052DCDC /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 477E79D91F8A167C0052DCDC /* Main.storyboard */; };
@@ -37,6 +39,8 @@
 /* Begin PBXFileReference section */
 		26803D4C4447A87E3EF0FFE3 /* Pods-DataCollect.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DataCollect.release.xcconfig"; path = "Pods/Target Support Files/Pods-DataCollect/Pods-DataCollect.release.xcconfig"; sourceTree = "<group>"; };
 		3BE93A86211B57698F127D7A /* Pods-DataCollect.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DataCollect.debug.xcconfig"; path = "Pods/Target Support Files/Pods-DataCollect/Pods-DataCollect.debug.xcconfig"; sourceTree = "<group>"; };
+		477243431F8EF19B00902148 /* Database.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Database.swift; sourceTree = "<group>"; };
+		477243481F8EF59700902148 /* DeviceMotionEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceMotionEntity.swift; sourceTree = "<group>"; };
 		477E79D21F8A167C0052DCDC /* DataCollect.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DataCollect.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		477E79D51F8A167C0052DCDC /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		477E79D71F8A167C0052DCDC /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -79,6 +83,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		477243451F8EF4AA00902148 /* Database */ = {
+			isa = PBXGroup;
+			children = (
+				477243431F8EF19B00902148 /* Database.swift */,
+				477243481F8EF59700902148 /* DeviceMotionEntity.swift */,
+			);
+			path = Database;
+			sourceTree = "<group>";
+		};
 		477E79C91F8A167C0052DCDC = {
 			isa = PBXGroup;
 			children = (
@@ -110,6 +123,7 @@
 				477E79DC1F8A167C0052DCDC /* Assets.xcassets */,
 				477E79DE1F8A167C0052DCDC /* LaunchScreen.storyboard */,
 				477E79E11F8A167C0052DCDC /* Info.plist */,
+				477243451F8EF4AA00902148 /* Database */,
 			);
 			path = DataCollect;
 			sourceTree = "<group>";
@@ -340,7 +354,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				477243441F8EF19B00902148 /* Database.swift in Sources */,
 				477E79D81F8A167C0052DCDC /* ViewController.swift in Sources */,
+				477243491F8EF59700902148 /* DeviceMotionEntity.swift in Sources */,
 				477E79D61F8A167C0052DCDC /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
