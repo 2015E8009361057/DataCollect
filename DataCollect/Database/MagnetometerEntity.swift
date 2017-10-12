@@ -16,14 +16,14 @@ class MagnetometerEntity {
     
     private let id = Expression<Int64>("id");
     
+    // Store time when get magnetometer's data
+    private let timeStamp = Expression<Double>("timeStamp")
+    private let date = Expression<String>("date")
+    
     // Store data of magnetometer
     private let magnetometerX = Expression<Double>("magnetometerX")
     private let magnetometerY = Expression<Double>("magnetometerY")
     private let magnetometerZ = Expression<Double>("magnetometerZ")
-    
-    // Store time when get magnetometer's data
-    private let timeStamp = Expression<Double>("timeStamp")
-    private let date = Expression<String>("date")
     
     private init() {
         // Create table if not exists
@@ -53,12 +53,11 @@ class MagnetometerEntity {
     func toString(magnetometer: Row) {
         print("""
             Magnetometer Info: \n
+            TimeStamp = \(magnetometer[self.timeStamp]) \n
+            Date = \(magnetometer[self.date]) \n
             Magnetometer X = \(magnetometer[self.magnetometerX]) \n
             Magnetometer Y = \(magnetometer[self.magnetometerY]) \n
-            Magnetometer Z = \(magnetometer[self.magnetometerZ]) \n
-            Date: \n
-            TimeStamp = \(magnetometer[self.timeStamp]) \n
-            Date = \(magnetometer[self.date])
+            Magnetometer Z = \(magnetometer[self.magnetometerZ])
             """)
     }
 }

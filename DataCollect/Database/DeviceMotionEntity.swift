@@ -17,6 +17,10 @@ class DeviceMotionEntity {
     
     private let id = Expression<Int64>("id");
     
+    // Store time when get device motion's data
+    private let timeStamp = Expression<Double>("timeStamp")
+    private let date = Expression<String>("date")
+    
     // Store data of accelermeter
     private let accelerometerX = Expression<Double>("accelerometerX")
     private let accelerometerY = Expression<Double>("accelerometerY")
@@ -27,24 +31,20 @@ class DeviceMotionEntity {
     private let gyroscopeY = Expression<Double>("gyroscopeY")
     private let gyroscopeZ = Expression<Double>("gyroscopeZ")
     
-    // Store time when get device motion's data
-    private let timeStamp = Expression<Double>("timeStamp")
-    private let date = Expression<String>("date")
-    
     private init() {
         // Create table if not exists
         do {
             if let connection = Database.shared.connection {
                 try connection.run(tblDeviceMotion.create(temporary: false, ifNotExists: true, withoutRowid: false, block: { (table) in
                     table.column(self.id, primaryKey: true)
+                    table.column(self.timeStamp)
+                    table.column(self.date)
                     table.column(self.accelerometerX)
                     table.column(self.accelerometerY)
                     table.column(self.accelerometerZ)
                     table.column(self.gyroscopeX)
                     table.column(self.gyroscopeY)
                     table.column(self.gyroscopeZ)
-                    table.column(self.timeStamp)
-                    table.column(self.date)
                 }))
                 print("Create table tblDeviceMotion successfully!")
             }
@@ -61,6 +61,8 @@ class DeviceMotionEntity {
     func toString(deviceMotion: Row) {
         print("""
                 Device Motion Details: \n
+                TimeStamp = \(deviceMotion[self.timeStamp]) \n
+                Date = \(deviceMotion[self.date]) \n
                 Accelerometer Info: \n
                 Accelerometer X = \(deviceMotion[self.accelerometerX]) \n
                 Accelerometer Y = \(deviceMotion[self.accelerometerY]) \n
@@ -68,10 +70,7 @@ class DeviceMotionEntity {
                 Gyroscope Info: \n
                 Gyroscope X = \(deviceMotion[self.gyroscopeX]) \n
                 Gyroscope Y = \(deviceMotion[self.gyroscopeY]) \n
-                Gyroscope Z = \(deviceMotion[self.gyroscopeZ]) \n
-                Date: \n
-                TimeStamp = \(deviceMotion[self.timeStamp]) \n
-                Date = \(deviceMotion[self.date])
+                Gyroscope Z = \(deviceMotion[self.gyroscopeZ])
             """)
     }
 }
