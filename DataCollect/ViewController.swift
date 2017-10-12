@@ -36,6 +36,36 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
     @IBOutlet var speed: UILabel!
     @IBOutlet var direction: UILabel!
     
+    @IBOutlet var switchButton: UISwitch!
+    
+    @IBAction func recordingDataAccordingSwitchButtonValue(_ sender: UISwitch) {
+        if (sender.isOn) {
+            // 获取设备传感器信息
+            startGetUpdateMotionData()
+            // 获取GPS信息
+            startGetUpdateLocationData()
+        }
+        else {
+            stopGetUpdateMotionData()
+            stopGetUpdateLocationData()
+        }
+    }
+    
+    override func viewDidLoad() {
+        
+        super.viewDidLoad()
+        // Do any additional setup after loading the view, typically from a nib.
+        switchButton.setOn(false, animated: true)
+        
+    }
+    
+    
+    
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
+    }
+    
     
     func timeStampToDate(timeStampInterval timeStamp: TimeInterval) -> String{
         let timeInterval: TimeInterval = TimeInterval(timeStamp)
@@ -45,7 +75,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         return dateFormat.string(from: date)
     }
     
-    func getUpdateMotionData() {
+    // 开始获取加速计、陀螺仪、磁力计信息
+    func startGetUpdateMotionData() {
         // 设置传感器信息更新频率
         print("打印传感器信息")
         let updateInterval = 1.0 / 20
@@ -64,7 +95,14 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
                     self.rotY.text = String(deviceData.rotationRate.y)
                     self.rotZ.text = String(deviceData.rotationRate.z)
                     let timeStampInterval = Date().timeIntervalSince1970
-                    print("device " + self.timeStampToDate(timeStampInterval: timeStampInterval))
+                    let date = self.timeStampToDate(timeStampInterval: timeStampInterval)
+                    let insertId = DeviceMotionEntity.shared.insert(timeStamp: timeStampInterval, date: date, accelerometerX: deviceData.userAcceleration.x, accelerometerY: deviceData.userAcceleration.y, accelerometerZ: deviceData.userAcceleration.z, gyroscopeX: deviceData.rotationRate.x, gyroscopeY: deviceData.rotationRate.y, gyroscopeZ: deviceData.rotationRate.z)
+                    if (insertId != nil) {
+                        print("Insert a record to tblDeviceMotion Successfully!")
+                    }
+                    else {
+                        print("Insert a record to tblDeviceMotion failed.")
+                    }
                 }
             })
         }
@@ -84,7 +122,14 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         }
     }
     
-    func getUpdateLocationData() {
+    // 停止获取加速计、陀螺仪、磁力计信息
+    func stopGetUpdateMotionData() {
+        motionManager.stopDeviceMotionUpdates()
+        motionManager.stopMagnetometerUpdates()
+    }
+    
+    // 开始获取位置信息
+    func startGetUpdateLocationData() {
         // Send Authorization Request
         locationManager.requestWhenInUseAuthorization()
         
@@ -99,20 +144,16 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
             // Set Location Update Interval
             locationManager.distanceFilter = 1
             
+            // 调用位置更新函数
             locationManager.startUpdatingLocation()
             locationManager.startUpdatingHeading()
         }
     }
-
-    override func viewDidLoad() {
-        
-        super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
-        
-        // 获取设备传感器信息
-        getUpdateMotionData()
-        // 获取GPS信息
-        getUpdateLocationData()
+    
+    // 停止获取位置信息
+    func stopGetUpdateLocationData() {
+        locationManager.stopUpdatingLocation()
+        locationManager.stopUpdatingHeading()
     }
     
     // 定位改变执行，可以得到新位置、旧位置
@@ -137,11 +178,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         direction.text = String(newHeading.trueHeading)
         print(newHeading.timestamp)
     }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
+    
+    
     
     /*
     override func viewDidAppear(_ animated: Bool) {
