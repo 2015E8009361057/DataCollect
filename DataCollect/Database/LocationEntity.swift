@@ -80,6 +80,7 @@ class LocationEntity {
         }
     }
     
+    
     // Query (find) all records in tblLocation
     func queryAll() -> AnySequence<Row>? {
         do {
