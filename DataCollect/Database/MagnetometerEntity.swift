@@ -50,7 +50,7 @@ class MagnetometerEntity {
         }
     }
     
-    // Insert a record to tblDeviceMotion
+    // Insert a record to tblMagnetometer
     func insert(timeStamp: Double, date: String, magnetometerX: Double, magnetometerY: Double, magnetometerZ: Double) -> Int64? {
         do {
             let insert = tblMagnetometer.insert(self.timeStamp <- timeStamp,
@@ -68,7 +68,7 @@ class MagnetometerEntity {
         }
     }
     
-    // Query (find) all records in tblDeviceMotion
+    // Query (find) all records in tblMagnetometer
     func queryAll() -> AnySequence<Row>? {
         do {
             return try Database.shared.connection?.prepare(self.tblMagnetometer)
