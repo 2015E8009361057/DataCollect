@@ -27,7 +27,7 @@ class DeviceMotionEntity {
     private let gyroscopeY = Expression<Double>("gyroscopeY")
     private let gyroscopeZ = Expression<Double>("gyroscopeZ")
     
-    // Store time when get device motion data
+    // Store time when get device motion's data
     private let timeStamp = Expression<Double>("timeStamp")
     private let date = Expression<String>("date")
     
