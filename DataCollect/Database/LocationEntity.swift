@@ -59,6 +59,39 @@ class LocationEntity {
         }
     }
     
+    // Insert a record to tblLocation
+    func insert(timeStamp: Double, date: String, longitude: Double, latitude: Double, height: Double, speed: Double, horizontalAccuracy: Double, verticalAccuracy: Double) -> Int64? {
+        do {
+            let insert = tblLocation.insert(self.timeStamp <- timeStamp,
+                                            self.date <- date,
+                                            self.longitude <- longitude,
+                                            self.latitude <- latitude,
+                                            self.height <- height,
+                                            self.speed <- speed,
+                                            self.horizontalAccuracy <- horizontalAccuracy,
+                                            self.verticalAccuracy <- verticalAccuracy)
+            let insertId = try Database.shared.connection!.run(insert)
+            return insertId
+        }
+        catch {
+            let nserror = error as NSError
+            print("Cannot insert new Location. Error is: \(nserror), \(nserror.userInfo)")
+            return nil
+        }
+    }
+    
+    // Query (find) all records in tblLocation
+    func queryAll() -> AnySequence<Row>? {
+        do {
+            return try Database.shared.connection?.prepare(self.tblLocation)
+        }
+        catch {
+            let nserror = error as NSError
+            print("Cannot query(list) all tblLocation. Error is: \(nserror), \(nserror.userInfo)")
+            return nil
+        }
+    }
+    
     func toString(location: Row) {
         print("""
             Location Info: \n
