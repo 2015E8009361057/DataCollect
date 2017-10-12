@@ -32,11 +32,11 @@ class MagnetometerEntity {
                 try connection.run(tblMagnetometer.create(temporary: false, ifNotExists: true, withoutRowid: false, block: {
                     (table) in
                     table.column(self.id, primaryKey: true)
+                    table.column(self.timeStamp)
+                    table.column(self.date)
                     table.column(self.magnetometerX)
                     table.column(self.magnetometerY)
                     table.column(self.magnetometerZ)
-                    table.column(self.timeStamp)
-                    table.column(self.date)
                 }))
                 print("Create table tblMagnetometer successfully!")
             }
@@ -47,6 +47,36 @@ class MagnetometerEntity {
         catch {
             let nserror = error as NSError
             print("Create table tblMagnetometer failed. Error is: \(nserror), \(nserror.userInfo)")
+        }
+    }
+    
+    // Insert a record to tblDeviceMotion
+    func insert(timeStamp: Double, date: String, magnetometerX: Double, magnetometerY: Double, magnetometerZ: Double) -> Int64? {
+        do {
+            let insert = tblMagnetometer.insert(self.timeStamp <- timeStamp,
+                                                self.date <- date,
+                                                self.magnetometerX <- magnetometerX,
+                                                self.magnetometerY <- magnetometerY,
+                                                self.magnetometerZ <- magnetometerZ)
+            let insertId = try Database.shared.connection!.run(insert)
+            return insertId
+        }
+        catch {
+            let nserror = error as NSError
+            print("Cannot insert new Magnetometer. Error is: \(nserror), \(nserror.userInfo)")
+            return nil
+        }
+    }
+    
+    // Query (find) all records in tblDeviceMotion
+    func queryAll() -> AnySequence<Row>? {
+        do {
+            return try Database.shared.connection?.prepare(self.tblMagnetometer)
+        }
+        catch {
+            let nserror = error as NSError
+            print("Cannot query(list) all tblMagnetometer. Error is: \(nserror), \(nserror.userInfo)")
+            return nil
         }
     }
     
