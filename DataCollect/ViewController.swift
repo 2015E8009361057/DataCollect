@@ -66,6 +66,33 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         // Dispose of any resources that can be recreated.
     }
     
+    func postJsonObjectToServer(parameter parameters: Dictionary<String, String>) {
+        guard let url = URL(string: "http://192.168.1.126:8080/PostServer/HandleJSONData") else { return }
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        guard let httpBody = try? JSONSerialization.data(withJSONObject: parameters, options: []) else { return }
+        request.httpBody = httpBody
+        
+        let session = URLSession.shared
+        session.dataTask(with: request) { (data, response, error) in
+            if let response = response {
+                print("response")
+                print(response)
+            }
+            if let data = data {
+                do {
+                    let json = try JSONSerialization.jsonObject(with: data, options: [])
+                    print("json")
+                    print(json)
+                }
+                catch {
+                    print(error)
+                }
+            }
+        }.resume()
+    }
+    
     
     func timeStampToDate(timeStampInterval timeStamp: TimeInterval) -> String{
         let timeInterval: TimeInterval = TimeInterval(timeStamp)
@@ -88,17 +115,36 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
                     let timeStampInterval = Date().timeIntervalSince1970
                     let date = self.timeStampToDate(timeStampInterval: timeStampInterval)
                     
+                    let aX = String(deviceData.userAcceleration.x)
+                    let aY = String(deviceData.userAcceleration.y)
+                    let aZ = String(deviceData.userAcceleration.z)
+                    
+                    let rX = String(deviceData.rotationRate.x)
+                    let rY = String(deviceData.rotationRate.y)
+                    let rZ = String(deviceData.rotationRate.z)
+                    
                     // 显示加速计信息
-                    self.accX.text = String(deviceData.userAcceleration.x)
-                    self.accY.text = String(deviceData.userAcceleration.y)
-                    self.accZ.text = String(deviceData.userAcceleration.z)
+                    self.accX.text = aX
+                    self.accY.text = aY
+                    self.accZ.text = aZ
                     
                     // 显示陀螺仪信息
-                    self.rotX.text = String(deviceData.rotationRate.x)
-                    self.rotY.text = String(deviceData.rotationRate.y)
-                    self.rotZ.text = String(deviceData.rotationRate.z)
+                    self.rotX.text = rX
+                    self.rotY.text = rY
+                    self.rotZ.text = rZ
                     
                     let rotationMatrix = deviceData.attitude.rotationMatrix
+                    
+                    let rotaMatrixM11 = String(rotationMatrix.m11)
+                    let rotaMatrixM12 = String(rotationMatrix.m12)
+                    let rotaMatrixM13 = String(rotationMatrix.m13)
+                    let rotaMatrixM21 = String(rotationMatrix.m21)
+                    let rotaMatrixM22 = String(rotationMatrix.m22)
+                    let rotaMatrixM23 = String(rotationMatrix.m23)
+                    let rotaMatrixM31 = String(rotationMatrix.m31)
+                    let rotaMatrixM32 = String(rotationMatrix.m32)
+                    let rotaMatrixM33 = String(rotationMatrix.m33)
+                    
                     // 插入到数据库 tblDeviceMotion 表中
                     let insertId = DeviceMotionEntity.shared.insert(timeStamp: timeStampInterval, date: date, accelerometerX: deviceData.userAcceleration.x, accelerometerY: deviceData.userAcceleration.y, accelerometerZ: deviceData.userAcceleration.z, gyroscopeX: deviceData.rotationRate.x, gyroscopeY: deviceData.rotationRate.y, gyroscopeZ: deviceData.rotationRate.z, rotationMatrixM11: rotationMatrix.m11, rotationMatrixM12: rotationMatrix.m12, rotationMatrixM13: rotationMatrix.m13, rotationMatrixM21: rotationMatrix.m21, rotationMatrixM22: rotationMatrix.m22, rotationMatrixM23: rotationMatrix.m23, rotationMatrixM31: rotationMatrix.m31, rotationMatrixM32: rotationMatrix.m32, rotationMatrixM33: rotationMatrix.m33)
                     if (insertId != nil) {
@@ -107,6 +153,11 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
                     else {
                         print("Insert a record to tblDeviceMotion failed.")
                     }
+                    // 组装要发送的内容
+                    let parameters = ["timeStamp" : String(timeStampInterval), "date" : date, "accelerometerX": aX, "accelerometerY" : aY, "accelerometerZ" : aZ, "gyroscopeX" : rX, "gyroscopeY" : rY, "gyroscopeZ" : rZ, "rotationMatrixM11" : rotaMatrixM11, "rotationMatrixM12" : rotaMatrixM12, "rotationMatrixM13" : rotaMatrixM13, "rotationMatrixM21" : rotaMatrixM21, "rotationMatrixM22" : rotaMatrixM22, "rotationMatrixM23" : rotaMatrixM23, "rotationMatrixM31" : rotaMatrixM31, "rotationMatrixM32" : rotaMatrixM32, "rotationMatrixM33" : rotaMatrixM33]
+                    
+                    // 将数据发送至服务器
+                    self.postJsonObjectToServer(parameter: parameters)
                 }
             })
         }
