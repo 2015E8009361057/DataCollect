@@ -17,6 +17,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
     var motionManager = CMMotionManager()
     var locationManager = CLLocationManager()
     
+    
     // Outlets
     @IBOutlet var accX: UILabel!
     @IBOutlet var accY: UILabel!
@@ -66,8 +67,9 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         // Dispose of any resources that can be recreated.
     }
     
-    func postJsonObjectToServer(parameter parameters: Dictionary<String, String>) {
-        guard let url = URL(string: "http://192.168.1.126:8080/PostServer/HandleJSONData") else { return }
+    func postJsonObjectToServer(uri URi: String, parameter parameters: Dictionary<String, String>) {
+        
+        guard let url = URL(string: "http://192.168.1.126:8080/DataServer/" + URi) else { return }
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
@@ -157,7 +159,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
                     let parameters = ["timeStamp" : String(timeStampInterval), "date" : date, "accelerometerX": aX, "accelerometerY" : aY, "accelerometerZ" : aZ, "gyroscopeX" : rX, "gyroscopeY" : rY, "gyroscopeZ" : rZ, "rotationMatrixM11" : rotaMatrixM11, "rotationMatrixM12" : rotaMatrixM12, "rotationMatrixM13" : rotaMatrixM13, "rotationMatrixM21" : rotaMatrixM21, "rotationMatrixM22" : rotaMatrixM22, "rotationMatrixM23" : rotaMatrixM23, "rotationMatrixM31" : rotaMatrixM31, "rotationMatrixM32" : rotaMatrixM32, "rotationMatrixM33" : rotaMatrixM33]
                     
                     // 将数据发送至服务器
-                    self.postJsonObjectToServer(parameter: parameters)
+                    let URi = "HandleDeviceMotionData"
+                    self.postJsonObjectToServer(uri: URi, parameter: parameters)
                 }
             })
         }
@@ -170,10 +173,13 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
                     let timeStampInterval = Date().timeIntervalSince1970
                     let date = self.timeStampToDate(timeStampInterval: timeStampInterval)
                     
+                    let mgX = String(magData.magneticField.x)
+                    let mgY = String(magData.magneticField.y)
+                    let mgZ = String(magData.magneticField.z)
                     // 显示磁力计信息
-                    self.magX.text = String(magData.magneticField.x)
-                    self.magY.text = String(magData.magneticField.y)
-                    self.magZ.text = String(magData.magneticField.z)
+                    self.magX.text = mgX
+                    self.magY.text = mgY
+                    self.magZ.text = mgZ
                     
                     // 插入到数据库 tblMagnetometer 表中
                     let insertId = MagnetometerEntity.shared.insert(timeStamp: timeStampInterval, date: date, magnetometerX: magData.magneticField.x, magnetometerY: magData.magneticField.y, magnetometerZ: magData.magneticField.z)
@@ -183,6 +189,11 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
                     else {
                         print("Insert a record to tblMagnetometer failed.")
                     }
+                    // 组装要发送的数据
+                    let parameters = ["timeStamp" : String(timeStampInterval), "date" : date, "magnetometerX" : mgX, "magnetometerY" : mgY, "magnetometerZ" : mgZ]
+                    // 将数据发送至服务器
+                    let URi = "HandleMagnetometerData"
+                    self.postJsonObjectToServer(uri: URi, parameter: parameters)
                 }
             })
         }
@@ -231,14 +242,20 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         let timeStampInterval = Date().timeIntervalSince1970
         let date = self.timeStampToDate(timeStampInterval: timeStampInterval)
         
+        let log = String(currentLocation.coordinate.longitude)
+        let lat = String(currentLocation.coordinate.latitude)
+        let hei = String(currentLocation.altitude)
+        let spd = String(currentLocation.speed)
+        let hoc = String(currentLocation.horizontalAccuracy)
+        let vec = String(currentLocation.verticalAccuracy)
         // 获取经度
-        longitude.text = String(currentLocation.coordinate.longitude)
+        longitude.text = log
         // 获取纬度
-        latitude.text = String(currentLocation.coordinate.latitude)
+        latitude.text = lat
         // 获取高度
-        height.text = String(currentLocation.altitude)
+        height.text = hei
         // 获取速度
-        speed.text = String(currentLocation.speed)
+        speed.text = spd
         
         // 插入到数据库 tblLocation 表中
         let insertId = LocationEntity.shared.insert(timeStamp: timeStampInterval, date: date, longitude: currentLocation.coordinate.longitude, latitude: currentLocation.coordinate.latitude, height: currentLocation.altitude, speed: currentLocation.speed, horizontalAccuracy: currentLocation.horizontalAccuracy, verticalAccuracy: currentLocation.verticalAccuracy)
@@ -248,6 +265,11 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         else {
             print("Insert a record to tblLocation failed.")
         }
+        // 组装要发送的数据
+        let parameters = ["timeStamp" : String(timeStampInterval), "date" : date, "longitude" : log, "latitude" : lat, "height" : hei, "speed" : spd, "horizontalAccuracy" : hoc, "verticalAccuracy" : vec]
+        // 将数据发送至服务器
+        let URi = "HandleLocationData"
+        self.postJsonObjectToServer(uri: URi, parameter: parameters)
     }
     
     //方向改变执行
@@ -255,9 +277,10 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         // 获取当前时间
         let timeStampInterval = Date().timeIntervalSince1970
         let date = self.timeStampToDate(timeStampInterval: timeStampInterval)
-        
+        let trh = String(newHeading.trueHeading)
+        let trhA = String(newHeading.headingAccuracy)
         // 获取方向
-        direction.text = String(newHeading.trueHeading)
+        direction.text = trh
         
         // 插入到数据库 tblLocationHeading 表中
         let insertId = LocationHeadingEntity.shared.insert(timeStamp: timeStampInterval, date: date, actualDirection: newHeading.trueHeading, directionAccuracy: newHeading.headingAccuracy)
@@ -267,6 +290,12 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         else {
             print("Insert a record to tblLocationHeading failed.")
         }
+        
+        // 组装要发送的数据
+        let parameters = ["timeStamp" : String(timeStampInterval), "date" : date, "actualDirection" : trh, "directionAccuracy" : trhA]
+        // 将数据发送至服务器
+        let URi = "HandleLocationHeadingData"
+        self.postJsonObjectToServer(uri: URi, parameter: parameters)
     }
     
     /*
